@@ -2,7 +2,7 @@ package Sys::Info::Driver::Windows::OS::Editions;
 use strict;
 use vars qw( $VERSION );
 
-use Sys::Info::Driver::Windows 0.69_01 qw( :metrics );
+use Sys::Info::Driver::Windows 0.69 qw( :metrics :WMI );
 
 $VERSION = '0.69_01';
 

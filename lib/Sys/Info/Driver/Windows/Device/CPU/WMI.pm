@@ -2,7 +2,7 @@ package Sys::Info::Driver::Windows::Device::CPU::WMI;
 use strict;
 use vars qw[$VERSION];
 use Win32::OLE qw (in);
-use Sys::Info::Driver::Windows;
+use Sys::Info::Driver::Windows qw(:WMI);
 
 $VERSION = '0.69_01';
 

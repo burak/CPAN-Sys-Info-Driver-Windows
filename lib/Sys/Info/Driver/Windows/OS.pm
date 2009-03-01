@@ -7,7 +7,7 @@ $VERSION = '0.69_01';
 use base qw( Sys::Info::Driver::Windows::OS::Editions );
 use Win32;
 use Win32::OLE qw( in );
-use Sys::Info::Driver::Windows;
+use Sys::Info::Driver::Windows qw( :WMI );
 use Sys::Info::Driver::Windows::OS::Net;
 use Carp qw( croak );
 BEGIN {
