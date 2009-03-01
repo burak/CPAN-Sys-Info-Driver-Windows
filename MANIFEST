@@ -8,7 +8,9 @@ lib/Sys/Info/Driver/Windows/OS/Net.pm
 tools/ppport.pl
 t/01-pod.t
 t/02-pod-coverage.t
-t/03-metrics.t
+t/03-basic.t
+t/05-metrics.t
+t/06-device-cpu.t
 Build.PL
 Makefile.PL
 ppport.h
