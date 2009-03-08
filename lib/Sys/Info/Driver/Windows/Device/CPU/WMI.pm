@@ -4,9 +4,7 @@ use vars qw[$VERSION];
 use Win32::OLE qw (in);
 use Sys::Info::Driver::Windows qw(:WMI);
 
-$VERSION = '0.69_01';
-
-my $CACHE;
+$VERSION = '0.69_03';
 
 my $WMI_INFO = {
     CpuStatus => {
@@ -278,17 +276,6 @@ my %LCache_names = qw(
 
 sub _fetch_from_wmi {
     my $self     = shift;
-    my $is_cache = $self->{cache};
-    my $ctimeout = $self->{cache_timeout} || 10; # in seconds
-    if ($is_cache && $CACHE) {
-        if ($CACHE->{TIMESTAMP} + $ctimeout < time) {
-            %{ $CACHE } = ();
-        }
-        else {
-            return @{ $CACHE->{DATA} };
-        }
-    }
-
     local $SIG{__DIE__};
     local $@;
 
@@ -324,7 +311,7 @@ sub _fetch_from_wmi {
                                       ||
                                       $attr{ $RENAME{$name} };
         }
-        if($attr{bus_speed} && $attr{speed}) {
+        if ( $attr{bus_speed} && $attr{speed} ) {
             $attr{multiplier} = sprintf '%.2f', $attr{speed} / $attr{bus_speed};
         }
         $attr{current_voltage} /= 10 if $attr{current_voltage};
@@ -334,7 +321,6 @@ sub _fetch_from_wmi {
         %attr = (); # reset
     }
 
-    $CACHE = { TIMESTAMP => time, DATA => [@attr] } if $is_cache;
     return @attr;
 }
 
