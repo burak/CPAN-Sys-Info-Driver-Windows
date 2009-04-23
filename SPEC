@@ -15,4 +15,9 @@ die "OS unsupported\n" if $^O !~ m{ \A MSWin }xmsi;
     dist_author    => 'Burak Gursoy <burak@cpan.org>',
     include_dirs   => [ '.' ],
     xs_files       => { 'Windows.xs' => 'lib/Sys/Info/Driver/Windows.xs' },
+    meta_merge     => {
+        resources => {
+            repository => 'http://bitbucket.org/burak/cpan-sys-info-driver-windows/',
+        },
+    },
 }
