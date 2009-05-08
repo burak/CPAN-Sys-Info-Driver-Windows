@@ -14,7 +14,7 @@ use constant SM_SERVERR2    => 89; # Windows Server 2003 R2
 use Exporter ();
 use XSLoader;
 
-$VERSION = '0.72';
+$VERSION = '0.73';
 @ISA     = qw( Exporter );
 @EXPORT  = qw(  );
 %EXPORT_TAGS = (

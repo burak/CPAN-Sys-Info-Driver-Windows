@@ -135,7 +135,9 @@ sub tz {
     }
     if ( NEW_PERL ) {
         require Encode;
-        $tz = Encode::decode( utf8 => $tz );
+        my $locale = $self->locale;
+        my $cp     = (split m{[.]}xms, $locale)[-1] + 0; # vugly hack
+        $tz = Encode::decode( "cp$cp", $tz ) if $cp;
     }
     return $tz;
 }
