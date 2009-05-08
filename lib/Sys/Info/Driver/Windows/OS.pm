@@ -10,6 +10,7 @@ use Win32::OLE qw( in );
 use Sys::Info::Driver::Windows qw( :all );
 use Sys::Info::Driver::Windows::OS::Net;
 use Carp qw( croak );
+
 BEGIN {
     # SetDualVar req. in Win32::TieRegistry breaks any handler
     local $SIG{__DIE__};
@@ -19,7 +20,8 @@ BEGIN {
     };
     die $@ if $@;
 }
-use Sys::Info::Constants qw( :windows_reg :windows_wmi );
+
+use Sys::Info::Constants qw( :windows_reg :windows_wmi NEW_PERL );
 
 # first row -> All; second row -> NT 4 SP6 and later
 my @OSV_NAMES = qw/
@@ -126,9 +128,16 @@ sub fs {
 
 sub tz {
     my $self = shift;
+    my $tz;
     foreach my $objItem ( in WMI_FOR('Win32_TimeZone') ) {
-        return $objItem->Caption;
+        $tz = $objItem->Caption;
+        last;
     }
+    if ( NEW_PERL ) {
+        require Encode;
+        $tz = Encode::decode( utf8 => $tz );
+    }
+    return $tz;
 }
 
 sub meta {
