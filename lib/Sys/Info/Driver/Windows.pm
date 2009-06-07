@@ -11,6 +11,8 @@ use constant SM_MEDIACENTER => 87; # Windows XP, Media Center Edition
 use constant SM_STARTER     => 88; # Windows XP Starter Edition
 use constant SM_SERVERR2    => 89; # Windows Server 2003 R2
 
+# Win32::SystemInfo::CpuUsage ???
+
 use Exporter ();
 use XSLoader;
 
