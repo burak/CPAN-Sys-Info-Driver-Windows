@@ -180,8 +180,8 @@ PPCODE:
         PUSHs( sv_2mortal( newSVpv( "lpMaximumApplicationAddress"  , 0 ) ) );
         PUSHs( sv_2mortal( newSVuv( si.lpMaximumApplicationAddress     ) ) );
 
-        PUSHs( sv_2mortal( newSVpv( "wProcessBitness"             , 0 ) ) );
-        PUSHs( sv_2mortal( newSViv(  wProcessBitness                  ) ) );
+        PUSHs( sv_2mortal( newSVpv( "wProcessBitness"              , 0 ) ) );
+        PUSHs( sv_2mortal( newSViv(  wProcessBitness                   ) ) );
 
         PUSHs( sv_2mortal( newSVpv( "wProcessorBitness"            , 0 ) ) );
         PUSHs( sv_2mortal( newSViv(  wProcessorBitness                 ) ) );
