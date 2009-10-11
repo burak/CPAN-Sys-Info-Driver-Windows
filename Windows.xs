@@ -189,5 +189,4 @@ PPCODE:
     }
     else {
         croak( "GetSystemInfo() can not be run on this version of Windows.");
-        //XSRETURN(0);
     }
