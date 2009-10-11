@@ -309,7 +309,7 @@ sub _from_wmi {
             }
             my $ren = $RENAME{$name};
             my $id  = $attr{ $ren };
-            $attr{ $ren } = $WMI_INFO->{ $name }->{ $id } || $id || $val;
+            $attr{ $ren } = $id ? $WMI_INFO->{ $name }->{ $id } : ( $id || $val);
         }
         if ( $attr{bus_speed} && $attr{speed} ) {
             $attr{multiplier} = sprintf '%.2f', $attr{speed} / $attr{bus_speed};
