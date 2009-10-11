@@ -6,6 +6,7 @@ die "OS unsupported\n" if $^O !~ m{ \A MSWin }xmsi;
         'Sys::Info::Driver::Unknown' => '0.72',
         'ExtUtils::CBuilder'         => 0,
         'Win32::OLE'                 => 0,
+        'Win32::TieRegistry'         => 0,
     },
     build_requires => {
         'Test::Sys::Info' => '0.15',

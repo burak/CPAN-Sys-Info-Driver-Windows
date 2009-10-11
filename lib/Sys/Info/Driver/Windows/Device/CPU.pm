@@ -1,29 +1,18 @@
 package Sys::Info::Driver::Windows::Device::CPU;
 use strict;
-use vars     qw( $VERSION @ISA $Registry );
+use warnings;
+#use vars     qw( $Registry );
 use base qw(
     Sys::Info::Driver::Unknown::Device::CPU::Env
     Sys::Info::Driver::Windows::Device::CPU::WMI
 );
-use Sys::Info::Constants qw( :windows_reg );
-use Sys::Info::Driver::Windows qw( :info );
-use Carp qw( croak );
+use Sys::Info::Constants       qw( :windows_reg );
+use Sys::Info::Driver::Windows qw( :info :reg   );
+use Carp                       qw( croak        );
 
-$VERSION = '0.70';
-
+our $VERSION = '0.70';
 my $REG;
-TRY_TO_LOAD: {
-    # SetDualVar req. in Win32::TieRegistry breaks any handler
-    local $SIG{__DIE__};
-    local $@;
-    eval {
-        require Win32::TieRegistry;
-        Win32::TieRegistry->import(Delimiter => '/');
-    };
-    if ( ! $@ && defined $Registry->{+WIN_REG_HW_KEY} ) {
-        $REG = $Registry->{ +WIN_REG_CPU_KEY };
-    }
-}
+$REG = registry()->{ +WIN_REG_CPU_KEY } if registry()->{ +WIN_REG_HW_KEY };
 
 sub load {
     my $self = shift;
@@ -43,10 +32,10 @@ sub bitness {
 sub identify {
     my $self = shift;
     if ( ! $self->{META_DATA} ) {
-        my @cache = $self->_from_wmi 
+        my @cache = $self->_from_wmi
                     or $self->_from_registry
                     or $self->SUPER::identify(@_)
-                    or croak("Failed to identify CPU");
+                    or croak('Failed to identify CPU');
         $self->{META_DATA} = [ @cache ];
     }
     return $self->_serve_from_cache(wantarray);
@@ -99,6 +88,8 @@ sub __env_pi { # XXX: remove this thing
 
 __END__
 
+=pod
+
 =head1 NAME
 
 Sys::Info::Driver::Windows::Device::CPU - Windows CPU Device Driver
@@ -129,19 +120,5 @@ See bitness in L<Sys::Info::Device::CPU>.
 
 L<Sys::Info>,
 L<Sys::Info::Device::CPU>.
-
-=head1 AUTHOR
-
-Burak Gürsoy, E<lt>burakE<64>cpan.orgE<gt>
-
-=head1 COPYRIGHT
-
-Copyright 2006-2009 Burak Gürsoy. All rights reserved.
-
-=head1 LICENSE
-
-This library is free software; you can redistribute it and/or modify 
-it under the same terms as Perl itself, either Perl version 5.10.0 or, 
-at your option, any later version of Perl 5 you may have available.
 
 =cut

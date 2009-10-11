@@ -1,10 +1,10 @@
 package Sys::Info::Driver::Windows::OS::Net;
 use strict;
-use vars qw($VERSION);
+use warnings;
 use Win32;
 use Sys::Info::Constants qw( WIN_USER_INFO_LEVEL );
 
-$VERSION = '0.70';
+our $VERSION = '0.70';
 
 BEGIN {
     if ( ! Win32::IsWin95() ) {
@@ -46,6 +46,8 @@ sub user_logon_server {
 
 __END__
 
+=pod
+
 =head1 NAME
 
 Sys::Info::Driver::Windows::OS::Net - A minimal interface to Win32API::Net
@@ -69,19 +71,5 @@ Return's the user's full (real) name if possible.
 =head2 user_logon_server USER
 
 Returns the logon server of C<USER> if possible.
-
-=head1 AUTHOR
-
-Burak Gürsoy, E<lt>burakE<64>cpan.orgE<gt>
-
-=head1 COPYRIGHT
-
-Copyright 2006-2009 Burak Gürsoy. All rights reserved.
-
-=head1 LICENSE
-
-This library is free software; you can redistribute it and/or modify 
-it under the same terms as Perl itself, either Perl version 5.10.0 or, 
-at your option, any later version of Perl 5 you may have available.
 
 =cut
