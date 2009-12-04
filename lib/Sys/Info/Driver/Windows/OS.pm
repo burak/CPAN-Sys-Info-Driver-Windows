@@ -4,6 +4,8 @@ use warnings;
 
 our $VERSION = '0.70';
 
+## no critic (ValuesAndExpressions::ProhibitMagicNumbers, ValuesAndExpressions::RequireNumberSeparators)
+
 use constant LAST_ELEMENT => -1;
 use constant MILISECOND   => 1000;
 use base qw( Sys::Info::Driver::Windows::OS::Editions );

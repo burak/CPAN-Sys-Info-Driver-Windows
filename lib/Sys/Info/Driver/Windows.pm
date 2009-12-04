@@ -80,6 +80,7 @@ sub decode_serial_key {
     #     http://www.perlmonks.org/?node_id=497616
     #     (c) Original code: William Gannon
     #     (c) Modifications: Charles Clarkson
+    ## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
     my $key     = shift || croak 'Key is missing';
     my @encoded = ( unpack 'C*', $key )[ reverse 52 .. 66 ];
     use integer;

@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use Sys::Info::Driver::Windows qw( :metrics :WMI );
 
+## no critic (ValuesAndExpressions::ProhibitMagicNumbers, ValuesAndExpressions::RequireNumberSeparators)
+
 our $VERSION = '0.70';
 
 my %VISTA_EDITION = ( # OK
@@ -108,6 +110,7 @@ sub _xp_or_03 {
             ${$edition_ref} = 'unknown';
         }
     }
+    return;
 }
 
 sub _xp_editions {
@@ -138,7 +141,7 @@ sub _2k_03_xp {
 
     ${$osname_ref}  = 'Windows 2000';
 
-    if ( $mask & 0x00000080 ) {
+    if ( $mask & 0x00000080 ) { ## no critic (ControlStructures::ProhibitCascadingIfElse)
         ${$edition_ref} = 'Datacenter Server';
     }
     elsif ( $mask & 0x00000002) {
