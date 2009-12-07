@@ -302,14 +302,17 @@ sub _from_wmi {
                 warn '[WMI ERROR] ' .  ( $@ || '<Unknown error>') . "\n";
                 next INNER;
             }
-            next INNER if ! defined $val || ! $WMI_INFO->{ $name };
+            next INNER if ! defined $val;
             if ( $name eq 'Name' ) {
                 $val =~ s{\s+}{ }xmsg;
                 $val = $self->trim( $val );
             }
             my $ren = $RENAME{$name};
             my $id  = $attr{ $ren };
-            $attr{ $ren } = $id ? $WMI_INFO->{ $name }->{ $id } : ( $id || $val);
+            $attr{ $ren } = $id && $WMI_INFO->{ $name }
+                          ? $WMI_INFO->{ $name }->{ $id }
+                          : ( $id || $val)
+                          ;
         }
         if ( $attr{bus_speed} && $attr{speed} ) {
             $attr{multiplier} = sprintf '%.2f', $attr{speed} / $attr{bus_speed};
