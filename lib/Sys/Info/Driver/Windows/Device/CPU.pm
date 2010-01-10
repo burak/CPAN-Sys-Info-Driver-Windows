@@ -6,9 +6,10 @@ use base qw(
     Sys::Info::Driver::Unknown::Device::CPU::Env
     Sys::Info::Driver::Windows::Device::CPU::WMI
 );
-use Sys::Info::Constants       qw( :windows_reg );
-use Sys::Info::Driver::Windows qw( :info :reg   );
-use Carp                       qw( croak        );
+use Sys::Info::Constants       qw( :windows_reg    );
+use Sys::Info::Driver::Windows qw( :info :reg :WMI );
+use Carp                       qw( croak           );
+use Win32::OLE                 qw( in              );
 
 our $VERSION = '0.70';
 my $REG;
@@ -22,8 +23,21 @@ sub load {
 
 sub bitness {
     my $self = shift;
+    ## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
+    # XXX: put this into ->arch()
+    if ( my($cpu) = $self->_from_wmi ) {
+        my $arch = $cpu->{architecture};
+        if ( $arch ) {
+            return +( $arch eq 'x64' || $arch =~ m{Itanium}xms ) ? 64 : 32;
+        }
+    }
     my %i    = GetSystemInfo();
-    return $i{wProcessorBitness};
+    my $bits = $i{wProcessorBitness};
+    if ( $bits < 0 ) {
+        warn "Failed to detect processor bitness. Guessing as 32bit\n";
+        return 32;
+    }
+    return $bits;
 }
 
 # XXX: interface is unclear. return data based on context !!!

@@ -308,11 +308,7 @@ sub _from_wmi {
                 $val = $self->trim( $val );
             }
             my $ren = $RENAME{$name};
-            my $id  = $attr{ $ren };
-            $attr{ $ren } = $id && $WMI_INFO->{ $name }
-                          ? $WMI_INFO->{ $name }->{ $id }
-                          : ( $id || $val)
-                          ;
+            $attr{ $ren } = $WMI_INFO->{ $name }{ $val } || $val;
         }
         if ( $attr{bus_speed} && $attr{speed} ) {
             $attr{multiplier} = sprintf '%.2f', $attr{speed} / $attr{bus_speed};
@@ -322,7 +318,6 @@ sub _from_wmi {
         $attr{load} = sprintf '%.2f', $attr{load} / LOAD_DIV if $attr{load};
         push @attr, {%attr, %LCACHE };
     }
-
     return @attr;
 }
 

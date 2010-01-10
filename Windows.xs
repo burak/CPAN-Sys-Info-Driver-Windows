@@ -115,18 +115,28 @@ PPCODE:
                             if (si2.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64) {
                                 wProcessBitness   = 32;
                                 wProcessorBitness = 64;
-                                //printf("32 bit process on IA64");
+                                lstrcpy( wProcessorArchitecture2, TEXT("IA-64") );
                             } else if (si2.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64) {
                                 wProcessBitness   = 32;
                                 wProcessorBitness = 64;
-                                //printf("32 bit process on AMD64");
+                                lstrcpy( wProcessorArchitecture2, TEXT("x64") );
                             } else {
-                                //printf("I am running in the future!");
+                                croak("I am running in the future!");
                             }
                         } else {
-                            wProcessorBitness = (si.wProcessorLevel == 6 && si.wProcessorRevision >= 14)
+                            /* wProcessorBitness = (si.wProcessorLevel == 6 && si.wProcessorRevision >= 14)
                                               ? 64 // Core2
-                                              : 32;
+                                              : 32; */
+                            /*
+                            This is tricky. Only way to get a correct value seems to be
+                               (1) either using "intrin.h" -> No good with MinGW
+                               (2) or using a WMI call -> too complex under XS
+                            So, I set this to -1 instead and then try to correct
+                            it in the Perl layer with a WMI call.
+                            Any patches regarding this are welcome.
+                            */
+                            lstrcpy( wProcessorArchitecture2, TEXT("x86 or x86-64") );
+                            wProcessorBitness = -1;
                             wProcessBitness   = 32;
                         }
                     }
