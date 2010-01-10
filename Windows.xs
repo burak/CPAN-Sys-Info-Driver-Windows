@@ -45,6 +45,11 @@ PPCODE:
         - http://msdn.microsoft.com/en-us/library/ms724429(VS.85).aspx
         - http://blogs.msdn.com/junfeng/archive/2005/07/01/434574.aspx
     */
+
+    ZeroMemory(&si,   sizeof(SYSTEM_INFO));
+    ZeroMemory(&si2,  sizeof(SYSTEM_INFO));
+    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 
     if( !(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi)) )
