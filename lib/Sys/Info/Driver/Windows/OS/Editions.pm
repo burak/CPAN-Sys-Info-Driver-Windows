@@ -209,6 +209,28 @@ sub _vista_or_08 {
     return;
 }
 
+sub _win7 {
+    my $self        = shift;
+    my $edition_ref = shift;
+    my $osname_ref  = shift;
+    my $WMI_OS      = WMI_FOR('Win32_OperatingSystem');
+    return if ! $WMI_OS;
+
+    # fall-back
+    my $item    = ( in $WMI_OS )[0];
+    my $SKU     = $item->OperatingSystemSKU;
+
+    ${$osname_ref} = 'Windows 7';
+    if ( my $win7 = $VISTA_EDITION{ $SKU } ) {
+        ${$edition_ref} = $win7;
+    }
+    else {
+        (my $caption = $item->Caption) =~ s{.+?Windows \s 7\s?}{}xms;
+        ${$edition_ref} = $self->trim($caption) if $caption;
+    }
+    return;
+}
+
 1;
 
 __END__

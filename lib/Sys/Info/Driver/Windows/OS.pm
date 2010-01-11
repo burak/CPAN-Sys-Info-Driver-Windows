@@ -277,6 +277,7 @@ sub _osversion_table {
             : $t->(5,1) ? $self->_xp_editions( \$edition, \$os, $OSV )
             : $t->(5,2) ? $self->_xp_or_03(    \$edition, \$os, $OSV )
             : $t->(6,0) ? $self->_vista_or_08( \$edition, \$os       )
+            : $t->(6,1) ? $self->_win7(        \$edition, \$os       )
             :             do { $os = "Windows NT $version" }
         }
     }
@@ -303,7 +304,7 @@ sub _populate_osversion { # returns the object
 
     %OSVERSION = (
         NAME             => $osname,
-        NAME_EDITION     => "$osname $edition",
+        NAME_EDITION     => $edition ? "$osname $edition" : $osname,
         LONGNAME         => q{}, # will be set below
         LONGNAME_EDITION => q{}, # will be set below
         VERSION          => $version,

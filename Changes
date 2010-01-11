@@ -9,6 +9,7 @@ Time zone is GMT+2.
     => Added a workaround for CPU bitness detection for 32bit Windows + 64bit CPU.
        However, it's currently an ugly hack. Any patches are welcome.
     => Fix for RT#53523.
+    => Windows 7 support.
 
 0.72 Fri May  8 07:21:32 2009
     => Improve os->tz().
