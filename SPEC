@@ -10,7 +10,7 @@ die "OS unsupported\n" if $^O !~ m{ \A MSWin }xmsi;
         ( $] < 5.006 ? ( 'warnings::compat' => 0 ) : ()),
     },
     build_requires => {
-        'Test::Sys::Info' => '0.15',
+        'Test::Sys::Info' => '0.20',
     },
     recommends     => {},
     sign           => 0,
