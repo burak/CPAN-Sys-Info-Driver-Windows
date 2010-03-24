@@ -70,9 +70,9 @@ sub _xp_or_03 {
                             :                         'unknown';
         }
         else {
-            ${$edition_ref} = $arch =~m{X86}xmsi    ? 'Datacenter Edition'
-                            : $arch =~m{AMD64}xmsi  ? 'Datacenter x64 Edition'
-                            : $arch =~m{IA64}xmsi   ? 'Datacenter Edition Itanium'
+            ${$edition_ref} = $arch =~ m{X86}xmsi   ? 'Datacenter Edition'
+                            : $arch =~ m{AMD64}xmsi ? 'Datacenter x64 Edition'
+                            : $arch =~ m{IA64}xmsi  ? 'Datacenter Edition Itanium'
                             :                         'unknown';
         }
     }
@@ -156,17 +156,17 @@ sub _2k_03_xp {
     elsif ( $mask & 0x00000400 ) {
         ${$osname_ref}  = 'Windows Server 2003';
         ${$edition_ref} = GetSystemMetrics(SM_SERVERR2) ? 'R2 Web Edition'
-                                                      : 'Web Edition';
+                                                        : 'Web Edition';
     }
     elsif ( $mask & 0x00004000) {
         ${$osname_ref}  = 'Windows Server 2003';
         ${$edition_ref} = GetSystemMetrics(SM_SERVERR2) ? 'R2 Compute Cluster Edition'
-                                                      : 'Compute Cluster Edition';
+                                                        : 'Compute Cluster Edition';
     }
     elsif ( $mask & 0x00002000) {
         ${$osname_ref}  = 'Windows Server 2003';
         ${$edition_ref} = GetSystemMetrics(SM_SERVERR2) ? 'R2 Storage'
-                                                      : 'Storage';
+                                                        : 'Storage';
     }
     elsif ($mask & 0x00000040 ) {
         ${$osname_ref}  = 'Windows XP';

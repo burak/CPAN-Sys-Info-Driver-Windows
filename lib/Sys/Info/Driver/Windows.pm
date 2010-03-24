@@ -1,6 +1,9 @@
 package Sys::Info::Driver::Windows;
 use strict;
 use warnings;
+
+our $VERSION = '0.74_01';
+
 use base qw( Exporter );
 use Carp qw( croak    );
 use Sys::Info::Constants qw( WIN_B24_DIGITS );
@@ -37,8 +40,7 @@ BEGIN {
     }
 }
 
-our $VERSION = '0.73';
-our @EXPORT  = qw(  );
+our @EXPORT;
 our %EXPORT_TAGS = (
     metrics => [qw/
         GetSystemMetrics
@@ -47,12 +49,10 @@ our %EXPORT_TAGS = (
         SM_SERVERR2
         SM_STARTER
     /],
-    info => [qw/
-        GetSystemInfo
-    /],
-    WMI => [qw/ WMI WMI_FOR /],
-    etc => [qw/decode_serial_key/],
-    reg => [ qw( registry ) ],
+    info => [ qw/ GetSystemInfo CPUFeatures / ],
+    WMI  => [ qw/ WMI WMI_FOR               / ],
+    etc  => [ qw/ decode_serial_key         / ],
+    reg  => [ qw/ registry                  / ],
 );
 our @EXPORT_OK    = map { @{ $EXPORT_TAGS{$_} } } keys %EXPORT_TAGS;
 $EXPORT_TAGS{all} = \@EXPORT_OK;
@@ -137,6 +137,10 @@ None.
 
 The following functions will be automatically exported when the module
 is used.
+
+=head2 CPUFeatures
+
+TODO
 
 =head2 registry
 
