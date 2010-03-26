@@ -1,4 +1,5 @@
 # BEWARE: This module is mostly auto-generated!
+#    The source repository contains a template!
 package Sys::Info::Driver::Windows::Constants;
 use strict;
 use warnings;
