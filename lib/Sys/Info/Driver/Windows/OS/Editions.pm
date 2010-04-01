@@ -63,58 +63,72 @@ sub _xp_or_03 {
 
     ${$osname_ref} = 'Windows Server 2003';
 
-    if ( $mask & 0x00000080 ) {
-        if ( $metric ) {
-            ${$edition_ref} = $arch =~ m{X86}xmsi   ? 'R2 Datacenter Edition'
-                            : $arch =~ m{AMD64}xmsi ? 'R2 x64 Datacenter Edition'
-                            :                         'unknown';
-        }
-        else {
-            ${$edition_ref} = $arch =~ m{X86}xmsi   ? 'Datacenter Edition'
-                            : $arch =~ m{AMD64}xmsi ? 'Datacenter x64 Edition'
-                            : $arch =~ m{IA64}xmsi  ? 'Datacenter Edition Itanium'
-                            :                         'unknown';
-        }
-    }
-    elsif ( $mask & 0x00000002 ) {
-        if ( $metric ) {
-            ${$edition_ref} = $arch =~ m{X86}xmsi   ? 'R2 Enterprise Edition'
-                            : $arch =~ m{AMD64}xmsi ? 'R2 x64 Enterprise Edition'
-                            :                         'unknown';
-        }
-        else {
-            ${$edition_ref} = $arch =~ m{X86}xmsi   ? 'Enterprise Edition'
-                            : $arch =~ m{AMD64}xmsi ? 'Enterprise x64 Edition'
-                            : $arch =~ m{IA64}xmsi  ? 'Enterprise Edition Itanium'
-                            :                         'unknown';
-        }
+    my $id = $mask & 0x00000080 ? 1
+           : $mask & 0x00000002 ? 2
+           :                      3
+           ;
+    my $dispatch = '_xp_or_03_case' . $id;
+    return $self->$dispatch( $metric, $arch, $edition_ref, $osname_ref, $pt );
+}
+
+sub _xp_or_03_case1 {
+    my($self, $metric, $arch, $edition_ref) = @_;
+    if ( $metric ) {
+        ${$edition_ref} = $arch =~ m{  X86}xmsi ? 'R2 Datacenter Edition'
+                        : $arch =~ m{AMD64}xmsi ? 'R2 x64 Datacenter Edition'
+                        :                         'unknown';
     }
     else {
-        if ( $metric ) {
-            ${$edition_ref} = $arch =~ m{X86}xmsi   ? 'R2 Standard Edition'
-                            : $arch =~ m{AMD64}xmsi ? 'R2 x64 Standard Edition'
-                            :                         'unknown';
-        }
-        elsif ( $pt > 1 ) {
-            ${$edition_ref} = $arch =~ m{X86}xmsi   ? 'Standard Edition'
-                            : $arch =~ m{AMD64}xmsi ? 'Standard x64 Edition'
-                            :                         'unknown';
-        }
-        elsif ( $pt == 1 ) {
-            ${$osname_ref}  = 'Windows XP';
-            ${$edition_ref} = $arch =~ m{IA64}xmsi  ? '64 bit Edition Version 2003'
-                            : $arch =~ m{AMD64}xmsi ? 'Professional x64 Edition'
-                            :                         'unknown';
-        }
-        else {
-            ${$edition_ref} = 'unknown';
-        }
+        ${$edition_ref} = $arch =~ m{  X86}xmsi ? 'Datacenter Edition'
+                        : $arch =~ m{AMD64}xmsi ? 'Datacenter x64 Edition'
+                        : $arch =~ m{ IA64}xmsi ? 'Datacenter Edition Itanium'
+                        :                         'unknown';
+    }
+    return;
+}
+
+sub _xp_or_03_case2 {
+    my($self, $metric, $arch, $edition_ref) = @_;
+    if ( $metric ) {
+        ${$edition_ref} = $arch =~ m{  X86}xmsi ? 'R2 Enterprise Edition'
+                        : $arch =~ m{AMD64}xmsi ? 'R2 x64 Enterprise Edition'
+                        :                         'unknown';
+    }
+    else {
+        ${$edition_ref} = $arch =~ m{  X86}xmsi ? 'Enterprise Edition'
+                        : $arch =~ m{AMD64}xmsi ? 'Enterprise x64 Edition'
+                        : $arch =~ m{ IA64}xmsi ? 'Enterprise Edition Itanium'
+                        :                         'unknown';
+    }
+    return;
+}
+
+sub _xp_or_03_case3 {
+    my($self, $metric, $arch, $edition_ref, $osname_ref, $pt) = @_;
+    if ( $metric ) {
+        ${$edition_ref} = $arch =~ m{ X86}xmsi  ? 'R2 Standard Edition'
+                        : $arch =~ m{AMD64}xmsi ? 'R2 x64 Standard Edition'
+                        :                         'unknown';
+    }
+    elsif ( $pt > 1 ) {
+        ${$edition_ref} = $arch =~ m{  X86}xmsi ? 'Standard Edition'
+                        : $arch =~ m{AMD64}xmsi ? 'Standard x64 Edition'
+                        :                         'unknown';
+    }
+    elsif ( $pt == 1 ) {
+        ${$osname_ref}  = 'Windows XP';
+        ${$edition_ref} = $arch =~ m{ IA64}xmsi ? '64 bit Edition Version 2003'
+                        : $arch =~ m{AMD64}xmsi ? 'Professional x64 Edition'
+                        :                         'unknown';
+    }
+    else {
+        ${$edition_ref} = 'unknown';
     }
     return;
 }
 
 sub _xp_editions {
-    my $self = shift;
+    my $self        = shift;
     my $edition_ref = shift;
     my $osname_ref  = shift;
     my $OSV         = shift;
@@ -124,7 +138,7 @@ sub _xp_editions {
     ${$edition_ref} = GetSystemMetrics(SM_TABLETPC)    ? 'Tablet PC Edition'
                     : GetSystemMetrics(SM_MEDIACENTER) ? 'Media Center Edition'
                     : GetSystemMetrics(SM_STARTER)     ? 'Starter Edition'
-                    : $arch =~ m{x86}xmsi              ? 'Professional'
+                    : $arch =~ m{ x86}xmsi             ? 'Professional'
                     : $arch =~ m{IA64}xmsi             ? '64-bit Edition for Itanium systems'
                     :                                    q{};
     return;
@@ -135,10 +149,8 @@ sub _2k_03_xp {
     my $edition_ref = shift;
     my $osname_ref  = shift;
     my $OSV         = shift;
-
     my $mask        = $OSV->{RAW}{SUITEMASK};
     my $pt          = $OSV->{RAW}{PRODUCTTYPE};
-
     ${$osname_ref}  = 'Windows 2000';
 
     if ( $mask & 0x00000080 ) { ## no critic (ControlStructures::ProhibitCascadingIfElse)
