@@ -120,7 +120,7 @@ Sys::Info::Driver::Windows - Windows driver for Sys::Info
 
 =head1 SYNOPSIS
 
-    use Sys::Info::Driver::Windows::XS qw(:metrics);
+    use Sys::Info::Driver::Windows qw(:metrics);
     if ( GetSystemMetrics(SM_SERVERR2) ) {
         # do something ...
     }
