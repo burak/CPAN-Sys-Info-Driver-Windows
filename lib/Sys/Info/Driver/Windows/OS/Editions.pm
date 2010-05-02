@@ -3,11 +3,12 @@ use strict;
 use warnings;
 use Sys::Info::Driver::Windows qw( :metrics :WMI );
 
-## no critic (ValuesAndExpressions::ProhibitMagicNumbers, ValuesAndExpressions::RequireNumberSeparators)
+## no critic ( ValuesAndExpressions::ProhibitMagicNumbers    )
+## no critic ( ValuesAndExpressions::RequireNumberSeparators )
 
 our $VERSION = '0.70';
 
-my %VISTA_EDITION = ( # OK
+my %VISTA_EDITION = (
    0x00000006 => q{Business Edition},
    0x00000010 => q{Business N Edition},
    0x00000004 => q{Enterprise Edition},
@@ -18,7 +19,7 @@ my %VISTA_EDITION = ( # OK
    0x00000001 => q{Ultimate Edition},
 );
 
-my %SERVER08_EDITION = ( # OK
+my %SERVER08_EDITION = (
    0x00000012 => q{Cluster Server Edition},
    0x00000008 => q{Datacenter Edition Full Installation}, # Windows Server ...
    0x0000000C => q{Datacenter Edition Core Installation}, # Windows Server ...
