@@ -41,9 +41,8 @@ my %SERVER08_EDITION = (
 
 sub _cpu_arch {
     my $self = shift;
-    require Sys::Info;
-    my $info = Sys::Info->new;
-    my $cpu  = $info->device( 'CPU' );
+    require Sys::Info::Device;
+    my $cpu = Sys::Info::Device->new( 'CPU' );
     foreach my $cpu ( $cpu->identify ) {
         # get the first available one
         return $cpu->{architecture} if $cpu->{architecture};
