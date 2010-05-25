@@ -37,7 +37,7 @@ BEGIN {
     }
 }
 
-our $VERSION = '0.73';
+our $VERSION = '0.74';
 our @EXPORT  = qw(  );
 our %EXPORT_TAGS = (
     metrics => [qw/

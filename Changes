@@ -2,6 +2,9 @@ Revision history for Perl extension Sys::Info::Driver::Windows.
 
 Time zone is GMT+2.
 
+0.74 Tue May 25 03:16:22 2010
+    => Fix a bootstrapping issue.
+
 0.73 Sun Jan 10 06:13:24 2010
     => Support new uname().
     => Perl::Critic refactoring.
