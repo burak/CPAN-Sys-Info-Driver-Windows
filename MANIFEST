@@ -28,3 +28,4 @@ include/mingw32/COPYING
 include/mingw32/README
 include/cpu.h
 builder/My.pm
+builder/My/Util.pm

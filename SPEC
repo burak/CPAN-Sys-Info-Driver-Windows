@@ -17,6 +17,7 @@ die "OS unsupported\n" if $^O !~ m{ \A MSWin }xmsi;
     },
     build_requires => {
         'Test::Sys::Info' => '0.20',
+        'Capture::Tiny'   => 0,
     },
     recommends     => {},
     sign           => 0,

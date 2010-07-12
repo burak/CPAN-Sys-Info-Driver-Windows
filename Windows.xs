@@ -9,11 +9,7 @@
 #include <tchar.h>
 #include <string.h>
 
-#ifdef __MINGW32__
-#include "include/mingw32/intrin.h"
-#else
-#include <intrin.h>
-#endif
+#include "detect.h"
 
 #include "include/cpu.h"
 
