@@ -2,7 +2,7 @@ package Sys::Info::Driver::Windows;
 use strict;
 use warnings;
 
-our $VERSION = '0.74_03';
+our $VERSION = '0.75_01';
 
 use base qw( Exporter );
 use Carp qw( croak    );
