@@ -23,12 +23,16 @@ my @OSV_NAMES = qw/
     SPMAJOR SPMINOR SUITEMASK PRODUCTTYPE
 /;
 
-my %OSVERSION;  # see _populate_osversion
-my %FILESYSTEM; # see _populate_fs
-
 BEGIN {
-    *is_win9x = *is_win95 = sub{ Win32::IsWin95() } if not defined &is_win9x;
-    *is_winnt             = sub{ Win32::IsWinNT() } if not defined &is_winnt;
+    *is_win9x = *is_win95 = sub{ Win32::IsWin95() } if ! defined &is_win9x;
+    *is_winnt             = sub{ Win32::IsWinNT() } if ! defined &is_winnt;
+}
+
+sub init {
+    my $self = shift;
+    $self->{OSVERSION}  = undef; # see _populate_osversion
+    $self->{FILESYSTEM} = undef; # see _populate_fs
+    return;
 }
 
 sub is_root {
@@ -42,37 +46,32 @@ sub is_root {
 sub node_name { return Win32::NodeName() }
 
 sub edition {
-    my $self = shift->_populate_osversion;
-    return $OSVERSION{RAW}->{EDITION};
+    return shift->_populate_osversion->{OSVERSION}{RAW}{EDITION};
 }
 
 sub product_type {
     my($self, @args) = @_;
     $self->_populate_osversion;
     my %opt  = @args % 2 ? () : @args;
-    my $raw  = $OSVERSION{RAW}->{PRODUCTTYPE};
-    return $raw if $opt{raw};
-    return $self->_product_type( $raw );
+    my $raw  = $self->{OSVERSION}{RAW}{PRODUCTTYPE};
+    return $opt{raw} ? $raw : $self->_product_type( $raw );
 }
 
 sub name {
     my($self, @args) = @_;
     $self->_populate_osversion;
-    my %opt  = @args % 2 ? () : @args;
-    my $id   = $opt{long} ? ($opt{edition} ? 'LONGNAME_EDITION' : 'LONGNAME')
-             :              ($opt{edition} ? 'NAME_EDITION'     : 'NAME'    )
-             ;
-    return $OSVERSION{ $id };
+    my %opt  = @args % 2  ? ()         : @args;
+    my $id   = $opt{long} ? 'LONGNAME' : 'NAME';
+    return $self->{OSVERSION}{ $opt{edition} ? $id . '_EDITION' : $id };
 }
 
 sub version {
     my($self, @args) = @_;
-    $self->_populate_osversion;
     my %opt     = @args % 2 ? () : @args;
-    my $version = $OSVERSION{VERSION};
+    my $version = $self->_populate_osversion->{OSVERSION}{VERSION};
 
     if ( $opt{short} ) {
-        my @v = split /[.]/xms, $version;
+        my @v = split m{[.]}xms, $version;
         shift @v;
         return join q{.}, @v ;
     }
@@ -81,8 +80,7 @@ sub version {
 }
 
 sub build {
-    my $self = shift->_populate_osversion;
-    return $OSVERSION{RAW}->{BUILD} || 0;
+    return shift->_populate_osversion->{OSVERSION}{RAW}{BUILD} || 0;
 }
 
 sub uptime {
@@ -120,8 +118,7 @@ sub logon_server {
 
 sub fs {
     my $self = shift;
-    $self->_populate_fs();
-    return %FILESYSTEM;
+    return %{ $self->_populate_fs->{FILESYSTEM} };
 }
 
 sub tz {
@@ -218,8 +215,8 @@ sub _wmidate_to_unix {
 }
 
 sub _populate_fs {
-    return if %FILESYSTEM;
     my $self  = shift;
+    return $self if $self->{FILESYSTEM};
     my($FSTYPE, $FLAGS, $MAXCOMPLEN) = Win32::FsType();
     if ( !$FSTYPE && Win32::GetLastError() ) {
         warn "Can not fetch file system information: $^E\n";
@@ -245,10 +242,12 @@ sub _populate_fs {
             push @fl, $f => $flag{$f} & $FLAGS ? 1 : 0;
         }
     }
+
     push @fl, max_file_length => $MAXCOMPLEN if $MAXCOMPLEN;
     push @fl, filesystem      => $FSTYPE     if $FSTYPE; # NTFS/FAT/FAT32
-    %FILESYSTEM = (@fl);
-    return;
+
+    $self->{FILESYSTEM} = { @fl };
+    return $self;
 }
 
 sub _osversion_table {
@@ -290,7 +289,7 @@ sub _osversion_table {
 
 sub _populate_osversion { # returns the object
     my $self = shift;
-    return $self if %OSVERSION; # build once use everywhere :p
+    return $self if $self->{OSVERSION};
     # Win32::GetOSName() is not reliable.
     # Since, an older release will not have any idea about XP or Vista
     # Server 2008 is tricky since it has the same version number as Vista
@@ -302,7 +301,7 @@ sub _populate_osversion { # returns the object
 
     my($osname, $version, $edition) = $self->_osversion_table( \%OSV );
 
-    %OSVERSION = (
+    $self->{OSVERSION} = {
         NAME             => $osname,
         NAME_EDITION     => $edition ? "$osname $edition" : $osname,
         LONGNAME         => q{}, # will be set below
@@ -320,13 +319,13 @@ sub _populate_osversion { # returns the object
             EDITION     => $edition,
             SUITEMASK   => $OSV{SUITEMASK},
         },
-    );
+    };
 
     my $build  = q{};
-       $build .= "build $OSVERSION{RAW}->{BUILD}" if $OSVERSION{RAW}->{BUILD};
-    my $string = $OSVERSION{RAW}->{STRING};
-    $OSVERSION{LONGNAME}         = join q{ }, $OSVERSION{NAME}, $string, $build;
-    $OSVERSION{LONGNAME_EDITION} = join q{ }, $OSVERSION{NAME_EDITION}, $string, $build;
+       $build .= "build $self->{OSVERSION}{RAW}{BUILD}" if $self->{OSVERSION}{RAW}{BUILD};
+    my $string = $self->{OSVERSION}{RAW}{STRING};
+    $self->{OSVERSION}{LONGNAME}         = join q{ }, $self->{OSVERSION}{NAME}, $string, $build;
+    $self->{OSVERSION}{LONGNAME_EDITION} = join q{ }, $self->{OSVERSION}{NAME_EDITION}, $string, $build;
 
     return $self;
 }
@@ -371,6 +370,8 @@ This document only discusses the driver specific parts.
 =head2 edition
 
 =head2 fs
+
+=head2 init
 
 =head2 is_win95
 
