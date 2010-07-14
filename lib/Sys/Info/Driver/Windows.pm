@@ -13,10 +13,7 @@ use constant SM_TABLETPC    => 86; # Windows XP Tablet PC edition
 use constant SM_MEDIACENTER => 87; # Windows XP, Media Center Edition
 use constant SM_STARTER     => 88; # Windows XP Starter Edition
 use constant SM_SERVERR2    => 89; # Windows Server 2003 R2
-
 use constant SERIAL_BASE    => 24;
-
-# Win32::SystemInfo::CpuUsage ???
 
 use XSLoader;
 
@@ -34,9 +31,10 @@ BEGIN {
         );
         1;
     };
+
     if ( $@ || ! $eok ) {
         my $error = $@ || '<unknown error>';
-        croak "Error loading Win32::TieRegistry-: $error";
+        croak "Error loading Win32::TieRegistry: $error";
     }
 }
 
