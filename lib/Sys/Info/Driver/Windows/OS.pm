@@ -4,7 +4,8 @@ use warnings;
 
 our $VERSION = '0.70';
 
-## no critic (ValuesAndExpressions::ProhibitMagicNumbers, ValuesAndExpressions::RequireNumberSeparators)
+## no critic (ValuesAndExpressions::ProhibitMagicNumbers)
+## no critic (ValuesAndExpressions::RequireNumberSeparators)
 
 use constant LAST_ELEMENT => -1;
 use constant MILISECOND   => 1000;
@@ -223,18 +224,18 @@ sub _populate_fs {
         return;
     }
     my %flag = (
-        case_sensitive     => 0x00000001,  #'supports case-sensitive filenames',
-        preserve_case      => 0x00000002,  #'preserves the case of filenames',
-        unicode            => 0x00000004,  #'supports Unicode in filenames',
-        acl                => 0x00000008,  #'preserves and enforces ACLs',
-        file_compression   => 0x00000010,  #'supports file-based compression',
-        disk_quotas        => 0x00000020,  #'supports disk quotas',
-        sparse             => 0x00000040,  #'supports sparse files',
-        reparse            => 0x00000080,  #'supports reparse points',
-        remote_storage     => 0x00000100,  #'supports remote storage',
-        compressed_volume  => 0x00008000,  #'is a compressed volume (e.g. DoubleSpace)',
-        object_identifiers => 0x00010000,  #'supports object identifiers',
-        efs                => 0x00020000,  #'supports the Encrypted File System (EFS)',
+        case_sensitive     => 0x00000001, #supports case-sensitive filenames
+        preserve_case      => 0x00000002, #preserves the case of filenames
+        unicode            => 0x00000004, #supports Unicode in filenames
+        acl                => 0x00000008, #preserves and enforces ACLs
+        file_compression   => 0x00000010, #supports file-based compression
+        disk_quotas        => 0x00000020, #supports disk quotas
+        sparse             => 0x00000040, #supports sparse files
+        reparse            => 0x00000080, #supports reparse points
+        remote_storage     => 0x00000100, #supports remote storage
+        compressed_volume  => 0x00008000, #is a compressed volume (e.g. DoubleSpace)
+        object_identifiers => 0x00010000, #supports object identifiers
+        efs                => 0x00020000, #supports the Encrypted File System (EFS)
     );
     my @fl;
     if ( $FLAGS ) {
@@ -321,11 +322,12 @@ sub _populate_osversion { # returns the object
         },
     };
 
-    my $build  = q{};
-       $build .= "build $self->{OSVERSION}{RAW}{BUILD}" if $self->{OSVERSION}{RAW}{BUILD};
-    my $string = $self->{OSVERSION}{RAW}{STRING};
-    $self->{OSVERSION}{LONGNAME}         = join q{ }, $self->{OSVERSION}{NAME}, $string, $build;
-    $self->{OSVERSION}{LONGNAME_EDITION} = join q{ }, $self->{OSVERSION}{NAME_EDITION}, $string, $build;
+    my $o      = $self->{OSVERSION};
+    my $build  = $o->{RAW}{BUILD} ? 'build ' . $o->{RAW}{BUILD} : q{};
+    my $string = $o->{RAW}{STRING};
+
+    $o->{LONGNAME}         = join q{ }, $o->{NAME},         $string, $build;
+    $o->{LONGNAME_EDITION} = join q{ }, $o->{NAME_EDITION}, $string, $build;
 
     return $self;
 }
