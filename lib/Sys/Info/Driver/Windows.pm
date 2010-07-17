@@ -1,6 +1,9 @@
 package Sys::Info::Driver::Windows;
 use strict;
 use warnings;
+
+our $VERSION = '0.76';
+
 use base qw( Exporter );
 use Carp qw( croak    );
 use Sys::Info::Constants qw( WIN_B24_DIGITS );
@@ -10,10 +13,7 @@ use constant SM_TABLETPC    => 86; # Windows XP Tablet PC edition
 use constant SM_MEDIACENTER => 87; # Windows XP, Media Center Edition
 use constant SM_STARTER     => 88; # Windows XP Starter Edition
 use constant SM_SERVERR2    => 89; # Windows Server 2003 R2
-
 use constant SERIAL_BASE    => 24;
-
-# Win32::SystemInfo::CpuUsage ???
 
 use XSLoader;
 
@@ -31,14 +31,14 @@ BEGIN {
         );
         1;
     };
+
     if ( $@ || ! $eok ) {
         my $error = $@ || '<unknown error>';
-        croak "Error loading Win32::TieRegistry-: $error";
+        croak "Error loading Win32::TieRegistry: $error";
     }
 }
 
-our $VERSION = '0.74';
-our @EXPORT  = qw(  );
+our @EXPORT;
 our %EXPORT_TAGS = (
     metrics => [qw/
         GetSystemMetrics
@@ -47,12 +47,10 @@ our %EXPORT_TAGS = (
         SM_SERVERR2
         SM_STARTER
     /],
-    info => [qw/
-        GetSystemInfo
-    /],
-    WMI => [qw/ WMI WMI_FOR /],
-    etc => [qw/decode_serial_key/],
-    reg => [ qw( registry ) ],
+    info => [ qw/ GetSystemInfo CPUFeatures / ],
+    WMI  => [ qw/ WMI WMI_FOR               / ],
+    etc  => [ qw/ decode_serial_key         / ],
+    reg  => [ qw/ registry                  / ],
 );
 our @EXPORT_OK    = map { @{ $EXPORT_TAGS{$_} } } keys %EXPORT_TAGS;
 $EXPORT_TAGS{all} = \@EXPORT_OK;
@@ -120,7 +118,7 @@ Sys::Info::Driver::Windows - Windows driver for Sys::Info
 
 =head1 SYNOPSIS
 
-    use Sys::Info::Driver::Windows::XS qw(:metrics);
+    use Sys::Info::Driver::Windows qw(:metrics);
     if ( GetSystemMetrics(SM_SERVERR2) ) {
         # do something ...
     }
@@ -137,6 +135,10 @@ None.
 
 The following functions will be automatically exported when the module
 is used.
+
+=head2 CPUFeatures
+
+TODO
 
 =head2 registry
 

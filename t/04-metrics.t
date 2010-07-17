@@ -37,6 +37,43 @@ diag sprintf "CPU: %s Family %s Model %s Stepping %s\n",
 diag sprintf "Minimum Application Address: %lx\n", $si{lpMinimumApplicationAddress};
 diag sprintf "Maximum Application Address: %lx\n", $si{lpMaximumApplicationAddress};
 
+my %feat = CPUFeatures();
+my $d    = Data::Dumper->new([\%feat],['*FEATURES']);
+
+diag $d->Dump;
+
+ok( defined $feat{$_}, "$_ CPU Feature defined" )
+    for qw(
+        APICPhysicalID
+        BrandIndex
+        BrandString
+        CLFLUSHcachelinesize
+        CPLQualifiedDebugStore
+        Count
+        CpuFeatures
+        ExIds
+        Extendedfamily
+        Extendedmodel
+        Family
+        FeatureFlags
+        FeatureInfo
+        Flags
+        Ids
+        KFBits
+        L2Associativity
+        L2CacheLineSize
+        L2CacheSizeK
+        MONITOR_MWAIT
+        Model
+        ProcessorType
+        SSE3NewInstructions
+        SteppingID
+        String
+        ThermalMonitor2
+        ____ebx
+        ____ecx
+    );
+
 ok( 1, 'The END' );
 
 1;
