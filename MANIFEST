@@ -29,3 +29,4 @@ include/mingw32/README
 include/cpu.h
 builder/My.pm
 builder/My/Util.pm
+builder/Capture/Tiny.pm
