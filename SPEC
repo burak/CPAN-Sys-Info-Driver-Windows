@@ -13,7 +13,6 @@ die "OS unsupported\n" if $^O !~ m{ \A MSWin }xmsi;
         'Win32::TieRegistry'         => 0,
         'Config::General'            => 0,
         'Win32API::Net'              => 0,
-        ( $] < 5.006 ? ( 'warnings::compat' => 0 ) : ()),
     },
     build_requires => {
         'Test::Sys::Info' => '0.20',
@@ -27,6 +26,15 @@ die "OS unsupported\n" if $^O !~ m{ \A MSWin }xmsi;
     meta_merge     => {
         resources => {
             repository => 'http://bitbucket.org/burak/cpan-sys-info-driver-windows/',
+        },
+    },
+    BUILDER => {
+        change_versions                  => 1,
+        copyright_first_year             => 2006,
+        add_pod_author_copyright_license => 1,
+        initialization_hook              => q{
+            require My::Util;
+            My::Util::write_detect_h();
         },
     },
 }
