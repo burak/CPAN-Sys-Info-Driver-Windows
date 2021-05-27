@@ -1,7 +1,7 @@
 package My;
 use strict;
 use warnings;
-use base qw( Build );
+use parent qw( Build );
 use File::Spec;
 use Carp qw( croak );
 use constant RE_CONSTANT => qr{

@@ -2,7 +2,7 @@ package Sys::Info::Driver::Windows::Device::CPU::WMI::Conf;
 use strict;
 use warnings;
 use vars            qw( $VERSION @EXPORT %CONF );
-use base            qw( Exporter );
+use parent          qw( Exporter );
 use Config::General qw();
 
 $VERSION = '0.75';

@@ -16,7 +16,7 @@ Sys::Info::Driver::Windows::Device - Base class for Windows device drivers
 
 =head1 SYNOPSIS
 
-    use base qw( Sys::Info::Driver::Windows::Device );
+    use parent qw( Sys::Info::Driver::Windows::Device );
 
 =head1 DESCRIPTION
 

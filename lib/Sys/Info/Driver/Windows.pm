@@ -4,7 +4,7 @@ use warnings;
 
 our $VERSION = '0.78';
 
-use base qw( Exporter );
+use parent qw( Exporter );
 use Carp qw( croak    );
 use Sys::Info::Constants qw( WIN_B24_DIGITS );
 

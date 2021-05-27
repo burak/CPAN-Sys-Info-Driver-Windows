@@ -3,7 +3,7 @@
 package Sys::Info::Driver::Windows::Constants;
 use strict;
 use warnings;
-use base qw( Exporter );
+use parent qw( Exporter );
 #define CPU Constants
 
 our $VERSION = '0.70';

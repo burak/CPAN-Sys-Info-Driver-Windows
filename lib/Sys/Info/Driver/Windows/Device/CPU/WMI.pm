@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use constant LOAD_DIV    => 100;
 use constant VOLTAGE_DIV =>  10;
-use base                       qw( Sys::Info::Base );
+use parent                     qw( Sys::Info::Base );
 use Win32::OLE                 qw( in              );
 use Sys::Info::Driver::Windows qw( :WMI            );
 use Sys::Info::Driver::Windows::Device::CPU::WMI::Conf;

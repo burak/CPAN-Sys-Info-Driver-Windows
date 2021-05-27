@@ -2,7 +2,7 @@ package Sys::Info::Driver::Windows::Device::CPU;
 use strict;
 use warnings;
 #use vars     qw( $Registry );
-use base qw(
+use parent qw(
     Sys::Info::Driver::Unknown::Device::CPU::Env
     Sys::Info::Driver::Windows::Device::CPU::WMI
 );

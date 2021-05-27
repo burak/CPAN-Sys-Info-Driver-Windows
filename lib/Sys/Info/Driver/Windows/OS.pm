@@ -9,7 +9,7 @@ our $VERSION = '0.70';
 
 use constant LAST_ELEMENT => -1;
 use constant MILISECOND   => 1000;
-use base qw( Sys::Info::Driver::Windows::OS::Editions );
+use parent qw( Sys::Info::Driver::Windows::OS::Editions );
 use Win32;
 use Win32::OLE                 qw( in    );
 use Carp                       qw( croak );

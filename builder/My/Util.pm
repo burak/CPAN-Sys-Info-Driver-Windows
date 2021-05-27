@@ -2,7 +2,7 @@ package My::Util;
 use strict;
 use warnings;
 use vars qw( @EXPORT_OK );
-use base qw( Exporter   );
+use parent qw( Exporter   );
 use Carp qw( croak      );
 
 @EXPORT_OK = qw( is_gcc4 write_detect_h );
